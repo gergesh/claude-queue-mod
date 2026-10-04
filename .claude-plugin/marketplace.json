@@ -1,0 +1,17 @@
+{
+  "name": "claude-queue-mod",
+  "owner": {
+    "name": "gergesh",
+    "url": "https://github.com/gergesh"
+  },
+  "metadata": {
+    "description": "A Claude Code mod that queues prompts until the running turn ends"
+  },
+  "plugins": [
+    {
+      "name": "wait-queue",
+      "source": "./",
+      "description": "/q <prompt> holds prompts until the running turn ends and sends them one per turn, with an editable queue above the prompt"
+    }
+  ]
+}
