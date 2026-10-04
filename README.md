@@ -13,21 +13,68 @@ follow-up that waits until Claude has finished, then goes out as its own turn.
 
 ## What it does
 
-- **`/q <prompt>`** queues a prompt. While a turn is running it answers at once
-  (`Queued until this turn ends (2 waiting)`); while idle it sends straight away.
+- **`/q <prompt>`**, or **Tab** once bound (below), queues a prompt. While a
+  turn is running it confirms in a toast (`Queued: 2 waiting.`); while idle it
+  sends straight away. `/q` leaves nothing in the transcript.
 - Queued prompts go out **one per turn, in order**, each as your own message.
-- **A band above the prompt** lists the queue while it has anything in it:
-  - **Edit** a prompt in place (Enter saves; saving it empty removes it)
-  - **↑ / ↓** to reorder, **✕** to remove
-  - **Pause / Resume** and **Clear** for the whole queue
+  Only one goes at a time, and one Claude Code refuses goes back to the front
+  of the queue with a toast.
+- **A band above the prompt** lists the queue while it has anything in it,
+  with **Pause / Resume** and **Clear**.
+- **Steer**: Enter on a queued prompt sends it into the turn Claude is running
+  now, read at its next step. A "↪ steering" line turns into "✓ read" once the
+  model has it; if the turn ends first, a short "continue" prompt follows so the
+  steer is not lost. While idle, Enter sends the prompt as a turn of its own.
 - Editing a prompt pauses sending, so a half-edited prompt never goes out.
 - Interrupting a turn (Esc) pauses the queue rather than sending into the
-  interruption. Resume from the band.
-- `chat:queueSubmit` (`ctrl+x enter` by default) feeds the same queue, for
-  anyone who prefers a key to a command.
+  interruption, with a toast saying so. Resume from the band.
 
-To reach the band from the keyboard: **ctrl+x tab** focuses it, Tab or the
-arrows move between buttons, Enter presses one, Esc returns to the prompt.
+### Keys
+
+Mods cannot see keys typed in the prompt box, so the two shortcuts come from
+Claude Code's own actions. Add them to `~/.claude/keybindings.json`:
+
+```json
+{
+  "bindings": [
+    {
+      "context": "Chat",
+      "bindings": {
+        "tab": "chat:queueSubmit",
+        "alt+up": "abovePrompt:focus"
+      }
+    },
+    {
+      "context": "Autocomplete",
+      "bindings": {
+        "tab": "autocomplete:accept"
+      }
+    }
+  ]
+}
+```
+
+- **Tab** submits the prompt with "wait for this turn", which the mod holds.
+  The `Autocomplete` entry keeps Tab accepting file, command and skill
+  suggestions while their menu is open: without it, a `Chat` binding for Tab
+  wins over the built-in autocomplete one and submits the prompt. The dim
+  suggestion in an empty prompt box is taken with → instead: Claude Code drops
+  an empty submit before any mod sees it, so Tab cannot do both.
+- **alt+↑** (or the default **ctrl+x tab**) moves into the band, with the focus
+  on the **newest** queued prompt. alt+↑ is also `/diff`'s file-list key, which
+  this binding takes over while the prompt box has focus.
+
+In the band:
+
+| Key | Does |
+| --- | --- |
+| ↑ / ↓ | move to the prompt before / after |
+| Enter | steer the focused prompt into the running turn (send it, while idle) |
+| `e` | edit the focused prompt (Enter saves; saving it empty removes it) |
+| `k` / `j` | move the focused prompt up / down the queue |
+| `x` | remove the focused prompt |
+| `p` | pause / resume sending |
+| Esc | back to the prompt box |
 
 ## Install
 

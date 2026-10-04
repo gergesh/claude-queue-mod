@@ -1,6 +1,6 @@
 {
   "name": "wait-queue",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "description": "/q <prompt> holds prompts until the running turn ends and sends them one per turn; a band above the prompt lists, edits, reorders and pauses them",
   "author": { "name": "gergesh", "url": "https://github.com/gergesh" },
   "repository": "https://github.com/gergesh/claude-queue-mod",
